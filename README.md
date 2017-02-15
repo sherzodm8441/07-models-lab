@@ -2,14 +2,14 @@
 
 ## Overview
 
-In previous lessons, we've applied logic to data provided by the user directly in our application controller. While this works, it does not follow the principle of 'separation of concerns' - our files should do one thing and one thing only. In this code-along lesson, we'll learn how to move the logic to a model in a Sinatra application. By doing this, we'll create our first full Model-View-Controller application in Sinatra!
+In previous lessons, we've applied logic to data provided by the user directly in our application controller. While this works, it does not follow the principle of 'separation of concerns' - our files should do one thing and one thing only. In this lab, we'll learn how to move the logic to a model in a Sinatra application. By doing this, we'll create our first full Model-View-Controller application in Sinatra!
 
 ## Objectives
 
 1. Create a model in Sinatra
 2. Link to created models from the application controller
-3.  Create instances of a model in the application controller
-4.  Display data from instances of a model in a view
+3. Create instances of a model in the application controller
+4. Display data from instances of a model in a view
 
 ## Setup
 
@@ -18,7 +18,7 @@ We'll use input from a form to create an instance of a model, and then send that
 To code along, fork and clone this lab. Run `bundle install` to make sure all of your dependencies are installed. 
 
 ### Starter Code
-Let's take a closer look at the starter code. Run `shotgun` to make sure that your application can run.
+Let's take a closer look at the starter code. Run your typical `shotgun` command to make sure that your application can run.
 
 #### Routes
 + The controller has two routes:
@@ -27,7 +27,7 @@ Let's take a closer look at the starter code. Run `shotgun` to make sure that yo
 
 ## Creating a Model
 
-We could analyze all of the data from `params[:user_text]` in our application controller, but our route would get messy very quickly. Instead, let's create a new class inside of our `models` directory that will take care of the analysis of the text. In your `models` directory, create a new file called `textanalyzer.rb`.
+We could analyze all of the data from `params[:user_text]` in our application controller, but our route would get messy very quickly. Instead, let's create a new class inside of our `models` directory that will take care of the analysis of the text. In your `models` directory, open the file called `textanalyzer.rb`.
 
 We're not going to go deeply into creating models in this lesson, as you've covered it in depth in our unit on object oriented programming. Instead, paste the following code in to your `textanalyzer.rb` file:
 
@@ -52,7 +52,7 @@ class TextAnalyzer
     @text.downcase.scan(/[bcdfghjklmnpqrstvwxyz]/).count
   end
 
-def most_used_letter
+  def most_used_letter
     all_letters_in_string = @text.downcase.gsub(/[^a-z]/, '').split('') #gets rid of spaces and turns it into an array
     letters_to_compare = all_letters_in_string.uniq
     most_used_letter = ""
@@ -82,14 +82,14 @@ my_text.count_of_consonants #=> 22
 my_text.most_used_letter #=> ["n", 6]
 
 ```
-In general our models are agnostic about the rest of our application - we could drop this class into a Command Line or Ruby on Rails app and it would function in the exact same way.
+In general our models are agnostic about the rest of our application - we could drop this class into a Command Line or an app and it would function in the exact same way.  Notice there is no `puts`, because information needs to get returned to the controller so it can end up in the view (using substitution within the `.erb` file).
 
 
 ## Using a Model in the Controller
 
 In order to use the model we've created in our controller we need to connect the two. To do this, we'll use the `require_relative` keyword to bring in the code from the model we've created. At the top of `app.rb`, add `require_relative "models/textanalyzer.rb"`. This now gives us the ability to create new instances of the TextAnalyzer class from within our controller.
 
-Now, let's take the data from `params[user_text]` (in the `post '/' do` route) and feed it into a new instance of the`TextAnalyzer` class:
+Now, let's take the data from `params[:user_text]` (in the `post '/' do` route) and feed it into a new instance of the`TextAnalyzer` class:
 
 ```ruby
 post '/' do
@@ -117,9 +117,3 @@ In our `results.erb` file, use erb tags to display the data stored in the `@anal
 ## Full MVC
 
 Congratulations! You've now created your first Sinatra app that uses a model, views, and a controller! You are taking user input in a form, sending it via params to the 'post' route where a new instance of the model is created using the data from the form. This instance is passed back to the view, where it is rendered using erb tags. Pat yourself on the back, this is a big milestone in your developer journey!
-
-<a href='https://learn.co/lessons/integrating-models-sinatra-walkthrough' data-visibility='hidden'>View this lesson on Learn.co</a>
-
-<p data-visibility='hidden'>View <a href='https://learn.co/lessons/sinatra-integrating-models-walkthrough'>Integrating Models for a Full MVC</a> on Learn.co and start learning to code for free.</p>
-
-<p class='util--hide'>View <a href='https://learn.co/lessons/sinatra-integrating-models-walkthrough'>Integrating Models for a Full MVC</a> on Learn.co and start learning to code for free.</p>
